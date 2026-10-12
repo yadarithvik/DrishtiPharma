@@ -1,0 +1,627 @@
+/* ==========================================================================
+   DRISHTI-PHARMA: MAIN STYLESHEET (UNIFIED DIMMED THEME)
+   Cohesive Dark Medical Aesthetic • ECG Waveforms • Split-Camera System
+   ========================================================================== */
+
+@import './typography.css';
+
+:root {
+    --bg-primary: #050505;
+    --bg-surface: #0a0e17;
+    --bg-card: #0c101a;
+    --border-dim: rgba(255, 255, 255, 0.08);
+    --border-gold: rgba(250, 204, 21, 0.25);
+    --neon-gold: #FACC15;
+    --neon-gold-glow: rgba(250, 204, 21, 0.4);
+    --text-primary: #F8FAFC;
+    --text-muted: #94A3B8;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #050505;
+}
+::-webkit-scrollbar-thumb {
+    background: #1E293B;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #FACC15;
+}
+
+/* Background Canvas Layer */
+#pillsCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Ambient Subtle Vignette */
+.ambient-glow {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at 50% 20%, rgba(250, 204, 21, 0.04) 0%, rgba(5, 5, 5, 0.98) 75%);
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Content Wrapper */
+.content-wrapper {
+    position: relative;
+    z-index: 10;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+}
+
+/* ==========================================================================
+   HEADER & NAVIGATION - SYSTEMATIC STRAIGHT ARRANGEMENT (NO FUMBLING)
+   ========================================================================== */
+.site-header {
+    width: 100%;
+    padding: 1rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 30;
+    gap: 0.75rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.site-header::-webkit-scrollbar {
+    display: none;
+}
+
+/* 4-Item Left Navigation - Straight Row */
+.header-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+/* Centered Brand Column */
+.brand-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-shrink: 0;
+    padding: 0 0.6rem;
+}
+
+.brand-title {
+    font-family: var(--font-cyber);
+    font-size: 1.45rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    line-height: 1.1;
+    white-space: nowrap;
+}
+
+@media (min-width: 1024px) {
+    .brand-title {
+        font-size: 1.75rem;
+    }
+}
+
+.brand-subtitle {
+    font-family: var(--font-heading);
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: #94A3B8;
+    letter-spacing: 0.07em;
+    margin-top: 1px;
+    white-space: nowrap;
+}
+
+.brand-badge {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: var(--neon-gold);
+    letter-spacing: 0.16em;
+    margin-top: 2px;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+}
+
+.brand-badge::before {
+    content: '';
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    background-color: var(--neon-gold);
+    border-radius: 50%;
+    box-shadow: 0 0 6px var(--neon-gold);
+}
+
+/* 4-Item Right Navigation - Straight Row */
+.header-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.nav-link {
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #94A3B8;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    padding: 0.3rem 0.55rem;
+    border-radius: 6px;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.nav-link.btn-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--neon-gold);
+    border: 1px solid var(--border-gold);
+    background: rgba(250, 204, 21, 0.06);
+    padding: 0.25rem 0.65rem;
+    border-radius: 8px;
+}
+
+.nav-link.btn-more:hover {
+    background: rgba(250, 204, 21, 0.12);
+    color: #FEF08A;
+}
+
+/* ==========================================================================
+   ECG / HEARTBEAT BANNER ("WHAT IS DRISHTI-PHARMA?")
+   ========================================================================== */
+.hero-headline-section {
+    margin: 2.5rem 0 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.ecg-container {
+    width: 100%;
+    max-width: 680px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.ecg-svg {
+    width: 100%;
+    height: 44px;
+    overflow: visible;
+}
+
+.ecg-line {
+    fill: none;
+    stroke: #FFFFFF;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.6)) drop-shadow(0 0 8px rgba(250, 204, 21, 0.3));
+}
+
+.ecg-pulse-dot {
+    fill: var(--neon-gold);
+    filter: drop-shadow(0 0 6px var(--neon-gold));
+}
+
+.hero-main-title {
+    font-family: var(--font-display);
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1.25;
+    padding: 0.5rem 1rem;
+}
+
+@media (min-width: 768px) {
+    .hero-main-title {
+        font-size: 2.4rem;
+        letter-spacing: 0.09em;
+    }
+}
+
+/* Clean Description Text Directly on Background (No Box) */
+.hero-desc-text {
+    max-width: 760px;
+    margin: 1.25rem auto 3rem;
+    text-align: center;
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: #94A3B8;
+    font-family: var(--font-body);
+}
+
+.hero-desc-text strong {
+    color: #E2E8F0;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   CAMERA BOX & SPLIT-VIEW COMPONENT
+   ========================================================================= */
+.camera-box {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-gold);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(250, 204, 21, 0.08);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 3.5rem;
+}
+
+.camera-box-header {
+    background: rgba(10, 14, 23, 0.9);
+    border-bottom: 1px solid var(--border-dim);
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.camera-viewport {
+    position: relative;
+    width: 100%;
+    min-height: 380px;
+    background: #030508;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Single Viewport View */
+.single-viewport {
+    width: 100%;
+    height: 100%;
+    min-height: 380px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* Split-View (Left: Original, Right: Enhanced) */
+.split-viewport {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    min-height: 380px;
+}
+
+@media (min-width: 768px) {
+    .split-viewport {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.split-pane {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.5rem;
+    min-height: 380px;
+}
+
+.split-pane-left {
+    background: #07090e;
+    border-bottom: 1px solid var(--border-dim);
+}
+
+@media (min-width: 768px) {
+    .split-pane-left {
+        border-bottom: none;
+        border-right: 1px solid var(--border-dim);
+    }
+}
+
+.split-pane-right {
+    background: #05070c;
+}
+
+/* Split Canvas Mount Area (Real Rendered & Captured Blister Images) */
+.split-canvas-mount {
+    margin: 1rem 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 220px;
+    background: rgba(10, 14, 23, 0.5);
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 0.5rem;
+}
+
+.split-canvas-mount canvas {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    display: block;
+}
+
+.split-visual-card {
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid var(--border-dim);
+    border-radius: 14px;
+    padding: 2.5rem 1rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin: auto 0;
+}
+
+.glare-overlay-effect {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 50%, rgba(255, 255, 255, 0.08) 100%);
+    pointer-events: none;
+}
+
+/* Controls Toolbar */
+.camera-controls-bar {
+    background: rgba(10, 14, 23, 0.95);
+    border-top: 1px solid var(--border-dim);
+    padding: 0.85rem 1.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+/* ==========================================================================
+   UNIFIED CONTENT SECTIONS (DIAGNOSTICS, PIPELINE, BENCHMARKS, SDG)
+   ========================================================================== */
+.section-wrapper {
+    margin-bottom: 4rem;
+    scroll-margin-top: 2rem;
+}
+
+.section-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-panel {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-dim);
+    border-radius: 18px;
+    padding: 1.5rem;
+}
+
+/* ==========================================================================
+   STATUS BADGES & BUTTONS (DIMMED THEME)
+   ========================================================================== */
+.badge-status {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: uppercase;
+}
+
+.badge-safe {
+    background: rgba(34, 197, 94, 0.12);
+    color: #4ADE80;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.badge-caution {
+    background: rgba(245, 158, 11, 0.12);
+    color: #FBBF24;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.badge-expired {
+    background: rgba(239, 68, 68, 0.15);
+    color: #F87171;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.btn-cyber {
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    background: var(--neon-gold);
+    color: #000000;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.btn-cyber:hover {
+    background: #FEF08A;
+}
+
+.btn-cyber-outline {
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    color: #E2E8F0;
+    border: 1px solid var(--border-dim);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.btn-cyber-outline:hover {
+    border-color: var(--border-gold);
+    color: var(--neon-gold);
+    background: rgba(250, 204, 21, 0.06);
+}
+
+/* Modals & Drawer */
+.modal-backdrop,
+.drawer-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.modal-backdrop {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.modal-backdrop.open,
+.drawer-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-card {
+    background: #090D16;
+    border: 1px solid var(--border-gold);
+    border-radius: 18px;
+    width: 100%;
+    max-width: 640px;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+    padding: 2rem;
+}
+
+.drawer-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 440px;
+    height: 100vh;
+    background: #080C14;
+    border-left: 1px solid var(--border-gold);
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 110;
+    display: flex;
+    flex-direction: column;
+}
+
+.drawer-backdrop.open .drawer-panel {
+    transform: translateX(0);
+}
+
+
+/* ==========================================================================
+   DYNAMIC SCANNING GRAPHIC ANIMATION (DARK GOLD AESTHETIC)
+   ========================================================================== */
+@keyframes scanLaser {
+    0% {
+        top: 12%;
+        opacity: 0.5;
+    }
+    50% {
+        top: 82%;
+        opacity: 1;
+    }
+    100% {
+        top: 12%;
+        opacity: 0.5;
+    }
+}
+
+.scan-laser-line-animated {
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, #FACC15 25%, #FEF08A 50%, #FACC15 75%, transparent 100%);
+    box-shadow: 0 0 8px #FACC15, 0 0 14px rgba(250, 204, 21, 0.7);
+    border-radius: 2px;
+    animation: scanLaser 2.2s ease-in-out infinite;
+    pointer-events: none;
+}

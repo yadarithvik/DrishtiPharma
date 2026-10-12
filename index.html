@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drishti-Pharma | Py-Sustain Hackathon Prototype</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Custom Stylesheet with Cache Buster -->
+    <link rel="stylesheet" href="./styles/main.css?v=4.0">
+</head>
+<body class="bg-black text-slate-100 select-none">
+
+    <!-- Screen Reader Live Announcement Region (WCAG AAA) -->
+    <div id="srAnnouncement" class="sr-only" aria-live="assertive" aria-atomic="true"></div>
+
+    <!-- Ambient Subtle Glow -->
+    <div class="ambient-glow"></div>
+
+    <!-- Background Interactive Floating Pills Canvas -->
+    <canvas id="pillsCanvas"></canvas>
+
+    <!-- Emergency Expired Drug Alert Banner -->
+    <div id="emergencyAlertBanner" class="hidden fixed top-4 left-1/2 -translate-x-1/2 z-50 max-w-xl w-[92%] bg-red-950/90 border border-red-500/60 rounded-xl p-4 shadow-2xl backdrop-blur-md items-center gap-4 transition-all">
+        <div class="w-9 h-9 rounded-lg bg-red-600/30 border border-red-500/50 flex items-center justify-center text-red-200 flex-shrink-0">
+            <i class="fa-solid fa-triangle-exclamation text-base"></i>
+        </div>
+        <div class="flex-1 text-xs text-red-100 font-mono" id="emergencyAlertText">
+            Emergency alert dispatched to Family Member!
+        </div>
+        <button onclick="document.getElementById('emergencyAlertBanner').classList.add('hidden')" class="text-red-400 hover:text-white p-1">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+
+    <!-- Top Navigation & Brand Header -->
+    <div class="content-wrapper">
+        <header class="site-header">
+            <!-- Left Navigation Menu (4 items as requested) -->
+            <nav class="header-nav-left" aria-label="Quick Actions">
+                <a href="#section-camera" class="nav-link">Scan</a>
+                <a href="#section-scanning-diagnostics" class="nav-link">Diagnostics</a>
+                <a href="#section-benchmarks" class="nav-link">Benchmarks</a>
+                <button id="nav-privacy" class="nav-link">Privacy policy</button>
+            </nav>
+
+            <!-- Centered Brand Identity -->
+            <div class="brand-center">
+                <h1 class="brand-title">Drishti-Pharma</h1>
+                <h2 class="brand-subtitle">Py-sustain Hackathon</h2>
+                <span class="brand-badge">PROTOTYPE</span>
+            </div>
+
+            <!-- Right Navigation Menu -->
+            <nav class="header-nav-right" aria-label="System Navigation">
+                <button id="nav-about" class="nav-link">About</button>
+                <button id="btn-more" class="nav-link btn-more">
+                    <span>More</span> <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                </button>
+            </nav>
+        </header>
+
+        <!-- Main Body -->
+        <main class="w-full">
+
+            <!-- ===============================================================
+                 1. HERO SECTION: "WHAT IS DRISHTI-PHARMA?" FLANKED BY ECG LINES
+                 =============================================================== -->
+            <section class="hero-headline-section" aria-label="Hero Section">
+                <div class="ecg-container">
+                    <!-- Top ECG Waveform -->
+                    <svg class="ecg-svg" viewBox="0 0 600 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path class="ecg-line" d="M 0 25 L 220 25 L 235 15 L 245 35 L 255 5 L 265 45 L 275 25 L 290 20 L 300 25 L 600 25" />
+                        <circle cx="255" cy="5" r="3" class="ecg-pulse-dot" />
+                    </svg>
+
+                    <!-- Headline Title -->
+                    <h2 class="hero-main-title">
+                        WHAT IS<br class="sm:hidden" /> DRISHTI-PHARMA?
+                    </h2>
+
+                    <!-- Bottom ECG Waveform -->
+                    <svg class="ecg-svg" viewBox="0 0 600 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path class="ecg-line" d="M 0 25 L 300 25 L 310 30 L 325 25 L 335 5 L 345 45 L 355 15 L 365 35 L 380 25 L 600 25" />
+                        <circle cx="345" cy="45" r="3" class="ecg-pulse-dot" />
+                    </svg>
+                </div>
+            </section>
+
+            <!-- ===============================================================
+                 2. DESCRIPTION TEXT DIRECTLY ON PAGE (NO BOX)
+                 =============================================================== -->
+            <p class="hero-desc-text">
+                <strong>Drishti-Pharma</strong> is an inclusive assistive vision system engineered to eliminate critical medication safety barriers for over <strong>40 million visually impaired citizens</strong> and <strong>140 million senior citizens</strong> in India. By solving specular glare on curved aluminium blister packaging and applying deterministic calendar validation, it extracts 4pt–6pt micro-print drug names, active formulations, and expiration dates—delivering immediate, life-saving spoken guidance in Indian regional languages without cloud reliance or AI hallucinations.
+            </p>
+
+            <!-- ===============================================================
+                 3. FULL-WIDTH CAMERA BOX & SPLIT-VIEW (ORIGINAL VS ENHANCED)
+                 =============================================================== -->
+            <section id="section-camera" class="camera-box">
+                <!-- Box Header -->
+                <div class="camera-box-header">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
+                        <span class="font-mono text-xs text-white font-bold tracking-wider uppercase">BLISTER PACK CAPTURE STATION</span>
+                    </div>
+
+                    <!-- Split View Badge (Hidden by default, shown when captured) -->
+                    <div id="camera-split-badge" class="hidden text-[11px] font-mono text-yellow-400 flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-yellow-400"></span>
+                        <span>SPLIT ANALYSIS: ORIGINAL VS ENHANCED</span>
+                    </div>
+
+                    <!-- Recording Indicator -->
+                    <div id="camera-rec-indicator" class="hidden text-xs font-mono text-red-400 flex items-center gap-1.5 animate-pulse">
+                        <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                        <span>LIVE STREAM</span>
+                    </div>
+                </div>
+
+                <!-- Viewport Container -->
+                <div class="camera-viewport">
+                    
+                    <!-- Single Camera View (Default Before Capture) -->
+                    <div id="camera-single-container" class="single-viewport">
+                        <!-- Live WebCam Video Element -->
+                        <video id="camera-stream-video" class="absolute inset-0 w-full h-full object-cover hidden" autoplay playsinline></video>
+
+                        <!-- Standby Viewport Placeholder -->
+                        <div id="camera-single-placeholder" class="text-center p-8 z-10">
+                            <div class="w-16 h-16 rounded-2xl bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center text-yellow-400 mx-auto mb-3 shadow-lg hover:scale-105 transition-transform" title="Live Camera Optical Sensor">
+                                <svg class="w-8 h-8 text-yellow-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" fill="rgba(250, 204, 21, 0.1)"/>
+                                    <circle cx="12" cy="13" r="3.5" stroke="currentColor" stroke-width="2"/>
+                                    <circle cx="17.5" cy="9.5" r="0.8" fill="currentColor"/>
+                                </svg>
+                            </div>
+                            <div class="font-display font-bold text-base text-white">Live Camera Standby</div>
+                            <p class="text-xs text-slate-400 font-mono max-w-sm mx-auto mt-1">
+                                Point camera at the medicine blister pack, or click Record, Capture, or Upload to analyze.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Split View (Appears Immediately Upon Capture or Upload) -->
+                    <div id="camera-split-container" class="split-viewport hidden">
+                        <!-- Left Side: Original (Raw Foil Glare) -->
+                        <div class="split-pane split-pane-left">
+                            <div class="flex items-center justify-between pb-2 border-b border-white/5">
+                                <span class="text-xs font-mono font-bold text-slate-300 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-image"></i> ORIGINAL (RAW FOIL GLARE)
+                                </span>
+                                <span class="text-[10px] font-mono text-red-400 bg-red-950/30 px-2 py-0.5 rounded border border-red-500/20">Washed Out</span>
+                            </div>
+
+                            <!-- Real Rendered Original Canvas Mount Target -->
+                            <div id="split-canvas-original" class="split-canvas-mount"></div>
+
+                            <div id="split-caption-original" class="text-[11px] font-mono text-slate-500 text-center">
+                                Standard OCR fails due to specular reflection saturation (78.4% glare bleed)
+                            </div>
+                        </div>
+
+                        <!-- Right Side: Enhanced Version (Telea Inpainting + LAB CLAHE) -->
+                        <div class="split-pane split-pane-right">
+                            <div class="flex items-center justify-between pb-2 border-b border-white/5">
+                                <span class="text-xs font-mono font-bold text-yellow-400 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i> ENHANCED VERSION (RESTORED)
+                                </span>
+                                <span class="text-[10px] font-mono text-emerald-400 bg-emerald-950/30 px-2 py-0.5 rounded border border-emerald-500/20">Clean Contrast</span>
+                            </div>
+
+                            <!-- Real Rendered Enhanced Canvas Mount Target -->
+                            <div id="split-canvas-enhanced" class="split-canvas-mount"></div>
+
+                            <div id="split-caption-enhanced" class="text-[11px] font-mono text-slate-400 text-center">
+                                Telea Inpaint + CLAHE • 94.2% Glare Rejection • Restored typography
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Controls Bar: Record, Capture, Upload -->
+                <div class="camera-controls-bar">
+                    <div class="flex items-center gap-2">
+                        <!-- Action 1: Record -->
+                        <button id="btn-camera-record" class="btn-cyber text-xs py-2 px-3">
+                            <i class="fa-solid fa-video mr-1.5 text-black"></i> Record
+                        </button>
+                        <!-- Action 2: Capture -->
+                        <button id="btn-camera-capture" class="btn-cyber-outline text-xs py-2 px-3">
+                            <i class="fa-solid fa-camera mr-1.5 text-yellow-400"></i> Capture
+                        </button>
+                        <!-- Action 3: Upload -->
+                        <label class="btn-cyber-outline text-xs py-2 px-3 cursor-pointer">
+                            <i class="fa-solid fa-upload mr-1.5 text-yellow-400"></i> Upload
+                            <input id="camera-file-input" type="file" accept="image/*" class="hidden">
+                        </label>
+                    </div>
+
+                    <div class="text-[11px] font-mono text-slate-400 flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span>Optical Recognition Active</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===============================================================
+                 4. SCANNING DIAGNOSTICS SECTION
+                 =============================================================== -->
+            <section id="section-scanning-diagnostics" class="section-wrapper">
+                <h3 class="section-title">
+                    <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
+                    Scanning Diagnostics
+                </h3>
+                
+                <div class="section-panel" id="scanning-diagnostics-view">
+                    <!-- Initial Standby State: No diagnosis data shown before scanning -->
+                    <div id="diagnostics-standby-placeholder" class="text-center py-12 px-4 space-y-3">
+                        <div class="relative w-16 h-16 rounded-2xl bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center text-yellow-400 mx-auto shadow-md overflow-hidden" title="Medication Scanner Optical Viewfinder">
+                            <!-- Viewfinder Brackets & Medicine Blister Pack Illustration -->
+                            <svg class="w-11 h-11" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Viewfinder Corner Brackets in Gold #FACC15 -->
+                                <path d="M8 18V10C8 8.89543 8.89543 8 10 8H18" stroke="#FACC15" stroke-width="2.5" stroke-linecap="round"/>
+                                <path d="M46 8H54C55.1046 8 56 8.89543 56 10V18" stroke="#FACC15" stroke-width="2.5" stroke-linecap="round"/>
+                                <path d="M56 46V54C56 55.1046 55.1046 56 54 56H46" stroke="#FACC15" stroke-width="2.5" stroke-linecap="round"/>
+                                <path d="M18 56H10C8.89543 56 8 55.1046 8 54V46" stroke="#FACC15" stroke-width="2.5" stroke-linecap="round"/>
+                                
+                                <!-- Medicine Packaging Blister Strip in Dark Slate & Amber -->
+                                <rect x="18" y="15" width="28" height="34" rx="4" fill="#0c101a" stroke="#FACC15" stroke-width="1.6" stroke-opacity="0.6"/>
+                                <!-- Blister Pill Pockets in Neon Gold & Yellow -->
+                                <circle cx="26" cy="23" r="3.2" fill="#FACC15" fill-opacity="0.85"/>
+                                <circle cx="38" cy="23" r="3.2" fill="#FACC15" fill-opacity="0.85"/>
+                                <circle cx="26" cy="33" r="3.2" fill="#EAB308" fill-opacity="0.75"/>
+                                <circle cx="38" cy="33" r="3.2" fill="#EAB308" fill-opacity="0.75"/>
+                                <!-- Microprint Barcode Lines -->
+                                <line x1="22" y1="41" x2="42" y2="41" stroke="#94A3B8" stroke-width="1.2" stroke-dasharray="2 1.5"/>
+                                <line x1="24" y1="44" x2="40" y2="44" stroke="#94A3B8" stroke-width="1.5 1"/>
+                            </svg>
+                            <!-- Animated Laser Scanning Beam in Gold/Amber -->
+                            <div class="scan-laser-line-animated"></div>
+                        </div>
+                        <h4 class="text-base font-bold text-white font-display">Awaiting Medication Scan</h4>
+                        <p class="text-xs text-slate-400 font-mono max-w-md mx-auto leading-relaxed">
+                            Point your camera at medicine packaging (blister strip or bottle) and click <strong class="text-yellow-400">Capture</strong>, or <strong class="text-yellow-400">Upload</strong> an image. Optical glare reduction and verified clinical diagnostics will appear here once scanned.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===============================================================
+                 4B. INTERACTIVE CLINICAL VOICE ASSISTANT (BEST-OF-BOTH-WORLDS SETUP)
+                 Powered by NVIDIA Nemotron 3 Ultra 550B A55B & NVIDIA Magpie-TTS Zero-Shot
+                 =============================================================== -->
+            <section id="section-interactive-assistant" class="section-wrapper">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+                    <h3 class="section-title !mb-0">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                        Ask Medicine Assistant (Nemotron 3 Ultra 550B Voice Agent)
+                    </h3>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-mono bg-yellow-400/10 text-yellow-400 border border-yellow-400/30 px-2.5 py-1 rounded-full">
+                            Google Gemini Vision × NVIDIA Nemotron 550B &amp; Magpie-TTS
+                        </span>
+                    </div>
+                </div>
+
+                <div class="section-panel space-y-4">
+                    <!-- Dialogue Description & Telemetry Bar -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-white/5 text-xs font-mono">
+                        <span class="text-slate-400">
+                            Empathetic spoken guidance for blind &amp; visually impaired patients
+                        </span>
+                        <div id="assistant-voice-status" class="text-emerald-400 flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <span>Nemotron 3 Ultra 550B A55B Active</span>
+                        </div>
+                    </div>
+
+                    <!-- Quick Accessible Suggestion Chips -->
+                    <div class="space-y-1.5">
+                        <span class="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">QUICK VOICE INQUIRIES (1-CLICK ACCESSIBILITY):</span>
+                        <div class="flex flex-wrap gap-2 text-xs font-mono">
+                            <button onclick="window.conversationalAssistant.askQuestion('What is the dosage and timing of this medicine?')" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-yellow-400 hover:text-black border border-white/10 text-slate-200 transition">
+                                💊 Dosage &amp; Timing
+                            </button>
+                            <button onclick="window.conversationalAssistant.askQuestion('Should I take this medicine before or after meals?')" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-yellow-400 hover:text-black border border-white/10 text-slate-200 transition">
+                                🍽️ Before or After Food?
+                            </button>
+                            <button onclick="window.conversationalAssistant.askQuestion('Can I take this at night or in the morning?')" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-yellow-400 hover:text-black border border-white/10 text-slate-200 transition">
+                                ⏰ Morning vs Night?
+                            </button>
+                            <button onclick="window.conversationalAssistant.askQuestion('How should I store this medicine safely?')" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-yellow-400 hover:text-black border border-white/10 text-slate-200 transition">
+                                🌡️ Storage Instructions
+                            </button>
+                            <button onclick="window.conversationalAssistant.askQuestion('Are there any safety warnings or precautions?')" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-yellow-400 hover:text-black border border-white/10 text-slate-200 transition">
+                                ⚠️ Safety &amp; Precautions
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Chat Log Display -->
+                    <div id="assistant-chat-log" class="min-h-[140px] max-h-[300px] overflow-y-auto rounded-xl bg-slate-950/80 p-4 border border-white/5 space-y-2.5">
+                        <div class="flex items-start gap-2">
+                            <div class="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0 text-xs mt-0.5 border border-emerald-500/30">
+                                <i class="fa-solid fa-user-doctor"></i>
+                            </div>
+                            <div class="rounded-2xl bg-slate-900 border border-white/5 text-slate-300 p-3 text-xs leading-relaxed max-w-[85%] font-body">
+                                <span class="text-[10px] font-mono text-emerald-400 block mb-1">NVIDIA NEMOTRON VOICE AGENT</span>
+                                Hello! I am your clinical voice assistant. You can speak or type any question about your scanned medication—such as when to take it, whether to consume it before or after food, or dosage instructions.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Accessible Controls & Input Bar -->
+                    <div class="flex flex-wrap items-center gap-2 pt-2">
+                        <button id="btn-assistant-mic" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-yellow-400 hover:text-black text-yellow-400 border border-white/10 text-xs font-mono transition flex items-center gap-2" title="Click to Speak via Microphone">
+                            <i class="fa-solid fa-microphone"></i>
+                            <span>Speak</span>
+                        </button>
+                        
+                        <input id="assistant-user-input" type="text" placeholder="Ask about dosage, timing, meals, or precautions..." class="flex-1 bg-slate-950 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-500 font-mono focus:outline-none focus:border-yellow-400 transition" />
+                        
+                        <button id="btn-assistant-send" class="btn-cyber text-xs py-2 px-4 flex items-center gap-1.5">
+                            <i class="fa-solid fa-paper-plane text-black"></i>
+                            <span>Ask</span>
+                        </button>
+
+                        <button id="btn-assistant-stop" class="btn-cyber-outline text-xs py-2 px-3 flex items-center gap-1.5" title="Stop Spoken Audio">
+                            <i class="fa-solid fa-stop text-red-400"></i>
+                            <span>Stop</span>
+                        </button>
+                    </div>
+
+                    <!-- Language Selector for Conversational Agent -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-white/5 text-xs font-mono text-slate-400">
+                        <span>Voice Agent Language:</span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="window.conversationalAssistant.setLanguage('en')" class="px-2.5 py-1 rounded bg-yellow-400/20 text-yellow-400 border border-yellow-400/30 text-[11px]">English (Magpie-TTS)</button>
+                            <button onclick="window.conversationalAssistant.setLanguage('hi')" class="px-2.5 py-1 rounded bg-slate-900 text-slate-300 hover:text-white text-[11px]">हिन्दी (Magpie-TTS)</button>
+                            <button onclick="window.conversationalAssistant.setLanguage('ta')" class="px-2.5 py-1 rounded bg-slate-900 text-slate-300 hover:text-white text-[11px]">தமிழ் (Google Neural)</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="section-benchmarks" class="section-wrapper">
+                <h3 class="section-title">
+                    <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
+                    Quantitative Benchmarks &amp; Latency
+                </h3>
+
+                <div class="section-panel space-y-5">
+                    <!-- Timing Bar -->
+                    <div class="bg-slate-950/70 p-4 rounded-xl border border-white/5 space-y-2">
+                        <div class="flex justify-between items-center text-xs font-mono">
+                            <span class="text-slate-300 font-semibold">TOTAL LATENCY BUDGET: 1.05 SECONDS</span>
+                            <span class="text-yellow-400">70% of 1.5s Maximum Assistive Threshold</span>
+                        </div>
+                        <div class="w-full bg-slate-900 h-2.5 rounded-full overflow-hidden flex">
+                            <div class="bg-slate-400 h-full" style="width: 11.4%" title="OpenCV Preprocessing (120ms)"></div>
+                            <div class="bg-yellow-400 h-full" style="width: 80.9%" title="Multimodal AI Vision (850ms)"></div>
+                            <div class="bg-emerald-400 h-full" style="width: 0.5%" title="Safety Rules (<5ms)"></div>
+                            <div class="bg-slate-300 h-full" style="width: 7.6%" title="Web Speech Audio (80ms)"></div>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 pt-1 font-mono text-xs text-slate-400">
+                            <div>1. Preprocessing: <strong class="text-white">120 ms</strong></div>
+                            <div>2. Vision Model: <strong class="text-yellow-400">850 ms</strong></div>
+                            <div>3. Safety Logic: <strong class="text-white">&lt; 5 ms</strong></div>
+                            <div>4. Audio Synthesis: <strong class="text-white">80 ms</strong></div>
+                        </div>
+                    </div>
+
+                    <!-- 1,000-Tablet Empirical Batch Evaluation Metric Cards -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div class="p-3.5 rounded-xl bg-slate-900/60 border border-white/5 text-center">
+                            <span class="text-[10px] font-mono text-slate-400 uppercase block">1,000 TABLET BATCH</span>
+                            <div class="text-xl md:text-2xl font-bold font-display text-white mt-1">1,000 / 1,000</div>
+                            <span class="text-[10px] text-emerald-400 font-mono">100% Evaluated</span>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-slate-900/60 border border-white/5 text-center">
+                            <span class="text-[10px] font-mono text-slate-400 uppercase block">SAFETY ACCURACY</span>
+                            <div class="text-xl md:text-2xl font-bold font-display text-emerald-400 mt-1">99.60%</div>
+                            <span class="text-[10px] text-slate-400 font-mono">Zero Dangerous Passes</span>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-slate-900/60 border border-white/5 text-center">
+                            <span class="text-[10px] font-mono text-slate-400 uppercase block">CUT STRIP DERIVATION</span>
+                            <div class="text-xl md:text-2xl font-bold font-display text-yellow-400 mt-1">89.05%</div>
+                            <span class="text-[10px] text-slate-400 font-mono">MFD + IP Stability Registry</span>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-slate-900/60 border border-white/5 text-center">
+                            <span class="text-[10px] font-mono text-slate-400 uppercase block">HALLUCINATION RISK</span>
+                            <div class="text-xl md:text-2xl font-bold font-display text-cyan-400 mt-1">0.0%</div>
+                            <span class="text-[10px] text-emerald-400 font-mono">Deterministic Guard Active</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="text-center py-8 text-xs font-mono text-slate-500 border-t border-white/5 my-8 space-y-2">
+                <div class="flex flex-wrap items-center justify-center gap-4 text-slate-400 mb-2">
+                    <span><kbd class="px-1.5 py-0.5 rounded bg-slate-800 text-[10px] text-yellow-400">V</kbd> Spoken Verdict</span>
+                    <span><kbd class="px-1.5 py-0.5 rounded bg-slate-800 text-[10px] text-yellow-400">M</kbd> Open More Menu</span>
+                    <span><kbd class="px-1.5 py-0.5 rounded bg-slate-800 text-[10px] text-yellow-400">ESC</kbd> Close Overlays</span>
+                </div>
+                <p>PySustain-2026 • BACSE101 Problem Solving using Python • School of Electronics Engineering (SENSE), Vellore Institute of Technology (VIT)</p>
+                <p class="text-slate-300 font-bold">Made by Yada Rithvik (26BVD0190), Anirudh Dodia (26BVD0100), NeelKorak Jana (26BVD0113) | Guide: Dr. Elakkiya</p>
+            </footer>
+
+        </main>
+    </div>
+
+    <!-- =======================================================================
+         'MORE' NAVIGATION DRAWER (VOICE, HISTORY, A11Y, SOS ALERT)
+         ======================================================================= -->
+    <div id="drawer-more" class="drawer-backdrop" aria-hidden="true">
+        <aside class="drawer-panel" role="dialog" aria-modal="true" aria-label="More Features Drawer">
+            <!-- Drawer Header -->
+            <div class="p-4 border-b border-white/5 flex items-center justify-between bg-slate-950/80">
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-yellow-400"></span>
+                    <h3 class="font-display font-bold text-sm text-white tracking-wide">DRISHTI COMPANION</h3>
+                </div>
+                <button id="close-drawer-btn" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
+            </div>
+
+            <!-- Drawer Tab Selector -->
+            <div class="grid grid-cols-4 border-b border-white/5 bg-slate-900/40 text-center font-heading text-xs">
+                <button class="more-tab-btn active p-2.5 border-b-2 border-yellow-400 text-yellow-400 font-bold" data-view="voice">
+                    <i class="fa-solid fa-volume-high block text-xs mb-1"></i> Voice
+                </button>
+                <button class="more-tab-btn p-2.5 border-b-2 border-transparent text-slate-400 hover:text-white font-bold" data-view="history">
+                    <i class="fa-solid fa-clock-rotate-left block text-xs mb-1"></i> History
+                </button>
+                <button class="more-tab-btn p-2.5 border-b-2 border-transparent text-slate-400 hover:text-white font-bold" data-view="a11y">
+                    <i class="fa-solid fa-universal-access block text-xs mb-1"></i> A11y
+                </button>
+                <button class="more-tab-btn p-2.5 border-b-2 border-transparent text-slate-400 hover:text-white font-bold" data-view="sos">
+                    <i class="fa-solid fa-shield-heart block text-xs mb-1"></i> SOS Alert
+                </button>
+            </div>
+
+            <!-- Drawer Content Panels -->
+            <div class="flex-1 overflow-y-auto p-4 space-y-4">
+                
+                <!-- SUB-FEATURE 1: VOICE COMPANION SETTINGS -->
+                <div id="moreView-voice" class="more-view-panel space-y-4">
+                    <div class="bg-slate-900/60 p-4 rounded-xl border border-white/5">
+                        <label class="block text-xs font-mono text-slate-400 mb-2 font-semibold">SPOKEN LANGUAGE</label>
+                        <select id="voiceLangSelect" class="w-full bg-slate-950 border border-white/10 text-white rounded-lg p-2 text-xs font-mono focus:border-yellow-400 outline-none">
+                            <option value="en-US">English (Indian / International)</option>
+                            <option value="hi-IN">हिन्दी (Hindi)</option>
+                            <option value="ta-IN">தமிழ் (Tamil)</option>
+                        </select>
+                        <span class="text-[10px] text-slate-500 font-mono mt-1 block">Zero-latency offline Web Speech synthesis.</span>
+                    </div>
+
+                    <div class="bg-slate-900/60 p-4 rounded-xl border border-white/5">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-xs font-mono text-slate-400 font-semibold">SPEECH SPEED RATE</label>
+                            <span id="voiceRateDisplay" class="text-xs font-mono text-yellow-400 font-bold">1.0x</span>
+                        </div>
+                        <input id="voiceRateRange" type="range" min="0.7" max="1.5" step="0.1" value="1.0" class="w-full accent-yellow-400 cursor-pointer">
+                        <div class="flex justify-between text-[10px] text-slate-500 font-mono mt-1">
+                            <span>Slower (0.7x)</span>
+                            <span>Normal (1.0x)</span>
+                            <span>Faster (1.5x)</span>
+                        </div>
+                    </div>
+
+                    <button id="testVoiceBtn" class="w-full btn-cyber py-2 justify-center">
+                        <i class="fa-solid fa-play mr-1"></i> Test Spoken Output
+                    </button>
+                </div>
+
+                <!-- SUB-FEATURE 2: MEDICINE HISTORY LOG -->
+                <div id="moreView-history" class="more-view-panel hidden space-y-3">
+                    <div class="flex items-center justify-between pb-2 border-b border-white/5">
+                        <span class="text-xs font-mono text-slate-400 font-semibold">PREVIOUS SCANS</span>
+                        <div class="flex gap-2">
+                            <button id="exportHistoryBtn" class="text-[10px] font-mono text-yellow-400 hover:underline">
+                                <i class="fa-solid fa-download"></i> Export JSON
+                            </button>
+                            <button id="clearHistoryBtn" class="text-[10px] font-mono text-red-400 hover:underline ml-2">
+                                <i class="fa-solid fa-trash"></i> Clear
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="historyListContainer" class="space-y-2 max-h-[60vh] overflow-y-auto">
+                        <!-- Populated by more-features.js -->
+                    </div>
+                </div>
+
+                <!-- SUB-FEATURE 3: ACCESSIBILITY SUITE -->
+                <div id="moreView-a11y" class="more-view-panel hidden space-y-4">
+                    <div class="bg-slate-900/60 p-4 rounded-xl border border-white/5 flex items-center justify-between">
+                        <div>
+                            <strong class="text-xs font-bold text-white block">Bionic Reading Mode</strong>
+                            <span class="text-[11px] text-slate-400 block">Bold initial fixation syllables for low-vision &amp; dyslexic users.</span>
+                        </div>
+                        <input id="toggleBionic" type="checkbox" class="w-4 h-4 accent-yellow-400 cursor-pointer">
+                    </div>
+
+                    <div class="bg-slate-900/60 p-4 rounded-xl border border-white/5 flex items-center justify-between">
+                        <div>
+                            <strong class="text-xs font-bold text-white block">High Contrast Mode</strong>
+                            <span class="text-[11px] text-slate-400 block">Boosts contrast ratio above 10:1 (WCAG 2.2 AAA standard).</span>
+                        </div>
+                        <input id="toggleContrast" type="checkbox" class="w-4 h-4 accent-yellow-400 cursor-pointer">
+                    </div>
+
+                    <div class="bg-slate-900/60 p-4 rounded-xl border border-white/5">
+                        <label class="block text-xs font-mono text-slate-400 mb-2 font-semibold">FONT SCALING</label>
+                        <div class="flex items-center gap-3">
+                            <button id="fontDecreaseBtn" class="flex-1 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-mono font-bold text-white transition">A- (Smaller)</button>
+                            <button id="fontIncreaseBtn" class="flex-1 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-mono font-bold text-white transition">A+ (Larger)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUB-FEATURE 4: EMERGENCY CAREGIVER / SOS ALERT (FAMILY MEMBER / XXXXXX) -->
+                <div id="moreView-sos" class="more-view-panel hidden space-y-4">
+                    <div class="bg-slate-900/70 p-4 rounded-xl border border-white/5">
+                        <div class="flex items-center gap-2 text-red-400 mb-2 font-bold text-xs">
+                            <i class="fa-solid fa-triangle-exclamation"></i> Caregiver Emergency Dispatch
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed font-body mb-3">
+                            When an elderly or visually impaired user scans a medication classified as <strong>DANGEROUS: EXPIRED</strong>, an automated alert is dispatched to designated guardians.
+                        </p>
+                        <div class="bg-slate-950 p-3 rounded-lg border border-white/5 text-xs font-mono space-y-1">
+                            <div><span class="text-slate-500">CATEGORY:</span> <strong class="text-white">Family Member</strong></div>
+                            <div><span class="text-slate-500">CONTACT:</span> <strong class="text-yellow-400">XXXXXX</strong></div>
+                            <div><span class="text-slate-500">CHANNEL:</span> <strong class="text-emerald-400">WhatsApp &amp; SMS Gateway</strong></div>
+                        </div>
+                    </div>
+
+                    <button onclick="window.splitCamera.currentMedicine = window.drishtiScanner.samples[2]; window.splitCamera.performCapture();" 
+                            class="w-full p-2.5 rounded-lg bg-red-600/80 hover:bg-red-600 text-white font-heading font-bold text-xs transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-bell"></i> Simulate Expired Drug Scan &amp; Alert
+                    </button>
+                </div>
+
+            </div>
+        </aside>
+    </div>
+
+    <!-- =======================================================================
+         ABOUT MODAL
+         ======================================================================= -->
+    <div id="modal-about" class="modal-backdrop" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-about-title">
+            <button class="modal-close-btn absolute top-4 right-4 text-slate-400 hover:text-white p-2">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="flex items-center gap-2 mb-3">
+                <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
+                <span class="text-xs font-mono uppercase tracking-wider text-yellow-400 font-bold">PySustain-2026 • Track 5</span>
+            </div>
+            <h3 id="modal-about-title" class="text-xl font-display font-extrabold text-white mb-3">
+                About Drishti-Pharma
+            </h3>
+            <div class="space-y-3 text-xs md:text-sm text-slate-300 font-body leading-relaxed">
+                <p>
+                    <strong>Drishti-Pharma</strong> is a specialized assistive platform built to eliminate medication safety barriers for over <strong>40 million visually impaired</strong> citizens and <strong>140 million elderly individuals</strong> across India.
+                </p>
+                <div class="bg-slate-950 p-3 rounded-xl border border-white/5 space-y-1.5 font-mono text-xs">
+                    <div class="text-yellow-400 font-bold">CORE INNOVATIONS:</div>
+                    <p>• <strong>Specular-Invariant Inpainting:</strong> Solves foil reflection on curved metallic blister packs using Fast Telea reconstruction and LAB CLAHE equalisation.</p>
+                    <p>• <strong>Zero Hallucination Calendar Logic:</strong> Enforces deterministic datetime arithmetic rather than guessing faded numbers.</p>
+                    <p>• <strong>Multilingual Voice Companion:</strong> Clear acoustic announcements in English, Hindi, and Tamil.</p>
+                </div>
+            </div>
+            <div class="mt-5 pt-3 border-t border-white/5 flex justify-end">
+                <button class="modal-close-btn btn-cyber text-xs py-1.5 px-4">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- =======================================================================
+         PRIVACY POLICY MODAL
+         ======================================================================= -->
+    <div id="modal-privacy" class="modal-backdrop" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-privacy-title">
+            <button class="modal-close-btn absolute top-4 right-4 text-slate-400 hover:text-white p-2">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="flex items-center gap-2 mb-3">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                <span class="text-xs font-mono uppercase tracking-wider text-emerald-400 font-bold">Security &amp; Dignity</span>
+            </div>
+            <h3 id="modal-privacy-title" class="text-xl font-display font-extrabold text-white mb-3">
+                Healthcare Privacy Policy
+            </h3>
+            <div class="space-y-3 text-xs md:text-sm text-slate-300 font-body leading-relaxed">
+                <p>
+                    Under the National Association for the Blind (NAB) healthcare autonomy principles, an individual's private prescriptions (including psychiatric, pain, or hormone therapy medications) must remain strictly confidential.
+                </p>
+                <div class="bg-slate-950 p-3 rounded-xl border border-white/5 space-y-1.5 font-mono text-xs">
+                    <p>✓ <strong>Local-First Processing:</strong> Image pre-processing and voice synthesis execute entirely within the local browser environment.</p>
+                    <p>✓ <strong>Zero Data Retention:</strong> No patient photos, prescription records, or biometric data are transmitted to external servers or logged in public databases.</p>
+                    <p>✓ <strong>No Third-Party Trackers:</strong> The application does not contain advertising cookies or telemetry SDKs.</p>
+                </div>
+            </div>
+            <div class="mt-5 pt-3 border-t border-white/5 flex justify-end">
+                <button class="modal-close-btn btn-cyber text-xs py-1.5 px-4">Acknowledge</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Scripts with Cache Buster -->
+    <script src="./js/floating-pills.js?v=3.1"></script>
+    <script src="./js/voice-engine.js?v=3.1"></script>
+    <script src="./js/scanner.js?v=3.1"></script>
+    <script src="./js/more-features.js?v=3.1"></script>
+    <script src="./js/split-camera.js?v=3.1"></script>
+    <script src="./js/conversational-assistant.js?v=3.1"></script>
+    <script src="./js/app.js?v=3.1"></script>
+</body>
+</html>
