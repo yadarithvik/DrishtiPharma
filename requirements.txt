@@ -1,0 +1,26 @@
+# ===============================================================================
+# Drishti-Pharma (दृष्टि फार्मा) - 100% Python Dependencies
+# PySustain-2026 | BACSE101 Problem Solving using Python | SENSE VIT Vellore
+# Faculty Mentor: Dr. R. Elakkiya | Team: Yada Rithvik, Anirudh Dodia, NeelKorak Jana
+# ===============================================================================
+
+# Core Computer Vision & Image Processing
+opencv-python>=4.8.0
+numpy>=1.24.0
+Pillow>=10.0.0
+
+# Multimodal Large Vision Language Model (Google GenAI)
+google-genai>=0.1.1
+
+# Multilingual Neural Audio & Speech Synthesis
+gTTS>=2.4.0
+pyttsx3>=2.90
+
+# Scientific Visualization & Architecture Diagrams
+matplotlib>=3.8.0
+
+# Academic Assessment & Official Report Generation
+python-docx>=1.1.0
+
+# Process & System Resource Management
+psutil>=5.9.0
