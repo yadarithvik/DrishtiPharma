@@ -29,9 +29,9 @@
 
 - **Faculty Mentor:** **Dr. R. Elakkiya**, Associate Professor Grade 1, School of Electronics Engineering (SENSE), VIT Vellore  
 - **Student Innovators:**
-  1. **Yada Rithvik** (Registration No: `26BVD0190`)
-  2. **Anirudh Dodia** (Registration No: `26BVD0100`)
-  3. **NeelKorak Jana** (Registration No: `26BVD0113`)
+  1. **Yada Rithvik**
+  2. **Anirudh Dodia**
+  3. **NeelKorak Jana**
 
 ---
 

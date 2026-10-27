@@ -1,7 +1,7 @@
 # Drishti-Pharma: Viva Defense & Live Evaluator Cheat Sheet
 ## Quick-Reference Guide for Instant Code Demonstrations during Faculty Review
 **PySustain-2026 | BACSE101 Problem Solving using Python | SENSE, VIT Vellore**  
-**Faculty Mentor:** Dr. R. Elakkiya | **Team:** Yada Rithvik (`26BVD0190`), Anirudh Dodia (`26BVD0100`), NeelKorak Jana (`26BVD0113`)
+**Faculty Mentor:** Dr. R. Elakkiya | **Team:** Yada Rithvik, Anirudh Dodia, NeelKorak Jana
 
 ---
 

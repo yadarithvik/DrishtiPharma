@@ -3,7 +3,7 @@
 **PySustain-2026 | Track 5: AI for Assistive Healthcare & Inclusive Technologies**  
 **Course Code:** BACSE101 – Problem Solving using Python | **SENSE, VIT Vellore**  
 **Faculty Mentor:** Dr. R. Elakkiya, Associate Professor Grade 1, SENSE, VIT Vellore  
-**Innovators:** Yada Rithvik (`26BVD0190`), Anirudh Dodia (`26BVD0100`), NeelKorak Jana (`26BVD0113`)  
+**Innovators:** Yada Rithvik, Anirudh Dodia, NeelKorak Jana  
 
 ---
 
